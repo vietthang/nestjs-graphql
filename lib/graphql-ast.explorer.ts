@@ -15,16 +15,19 @@ import {
   UnionTypeDefinitionNode,
 } from 'graphql';
 import { get, map, sortBy, upperFirst } from 'lodash';
-import {
-  ClassDeclaration,
-  ClassDeclarationStructure,
-  InterfaceDeclaration,
-  InterfaceDeclarationStructure,
-  ParameterDeclarationStructure,
-  SourceFile,
-  StructureKind,
-} from 'ts-morph';
 import { DEFINITIONS_FILE_HEADER } from './graphql.constants';
+
+type SourceFile = import('ts-morph').SourceFile;
+
+type ClassDeclaration = import('ts-morph').ClassDeclaration;
+
+type ClassDeclarationStructure = import('ts-morph').ClassDeclarationStructure;
+
+type InterfaceDeclaration = import('ts-morph').InterfaceDeclaration;
+
+type InterfaceDeclarationStructure = import('ts-morph').InterfaceDeclarationStructure;
+
+type ParameterDeclarationStructure = import('ts-morph').ParameterDeclarationStructure;
 
 @Injectable()
 export class GraphQLAstExplorer {
@@ -90,6 +93,8 @@ export class GraphQLAstExplorer {
     tsFile: SourceFile,
     mode: 'class' | 'interface',
   ) {
+    const { StructureKind } = require('ts-morph');
+
     const structureKind =
       mode === 'class' ? StructureKind.Class : StructureKind.Interface;
     const rootInterface = this.addClassOrInterface(tsFile, mode, {
@@ -124,6 +129,8 @@ export class GraphQLAstExplorer {
     tsFile: SourceFile,
     mode: 'class' | 'interface',
   ) {
+    const { StructureKind } = require('ts-morph');
+
     const parentName = get(item, 'name.value');
     if (!parentName) {
       return;
@@ -260,6 +267,8 @@ export class GraphQLAstExplorer {
   getFunctionParameters(
     inputs: ReadonlyArray<InputValueDefinitionNode>,
   ): ParameterDeclarationStructure[] {
+    const { StructureKind } = require('ts-morph');
+
     if (!inputs) {
       return [];
     }
